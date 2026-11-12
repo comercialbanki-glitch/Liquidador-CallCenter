@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liquidador · Operación Call Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F1B3D;--navy2:#1B2A55;--bg:#F5F3EE;--ce:#2F6BFF;--baq:#FF8A3D;--gold:#F2B705;--mut:#5B6478;--line:#E4E1D8;--ok:#1E9E62;--bad:#D64545}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--navy)}
+h1,h2,h3,.big{font-family:'Space Grotesk',Inter,sans-serif}
+header{background:var(--navy);color:#F5F3EE;padding:22px 32px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+header h1{margin:0;font-size:28px}
+header p{margin:4px 0 0;color:#C9D3EE;font-size:15px}
+.esc{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.esc span{color:#C9D3EE;font-size:14px;font-weight:600;margin-right:4px}
+.esc button{background:#1B2A55;color:#fff;border:2px solid transparent;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.esc button.on{background:var(--gold);color:var(--navy)}
+main{display:grid;grid-template-columns:400px 1fr;gap:24px;padding:24px 32px;max-width:1500px;margin:0 auto}
+@media(max-width:1000px){main{grid-template-columns:1fr;padding:16px}}
+.panel{background:#fff;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:6px;align-self:start}
+.grp{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:14px 0 4px;display:flex;align-items:center;gap:8px}
+.grp:first-child{margin-top:0}
+.grp i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.in{display:grid;grid-template-columns:1fr 120px;gap:4px 10px;align-items:center;padding:6px 0;border-bottom:1px solid #F0EDE6}
+.in label{font-weight:600;font-size:14px}
+.in input[type=number]{width:120px;padding:8px 10px;border:2px solid var(--line);border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;text-align:right;color:var(--navy)}
+.in input[type=number]:focus{outline:none;border-color:var(--ce)}
+.in input[type=range]{grid-column:1/3;width:100%;accent-color:var(--ce)}
+.in small{grid-column:1/3;color:var(--mut);font-size:12px}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:600;padding:8px 0}
+.chk input{width:18px;height:18px;accent-color:var(--ce)}
+.res{display:flex;flex-direction:column;gap:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:1200px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;border-radius:20px;padding:18px 20px}
+.kpi p{margin:0;color:var(--mut);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.kpi .big{font-size:32px;font-weight:700;margin-top:6px;line-height:1.1}
+.kpi small{color:var(--mut);font-size:13px}
+.kpi.dark{background:var(--navy);color:#F5F3EE}
+.kpi.dark p,.kpi.dark small{color:#C9D3EE}
+.kpi.gold{background:var(--gold)}
+.kpi.gold p,.kpi.gold small{color:#4A3A00}
+.split{background:#fff;border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.split h2{margin:0;font-size:24px}
+.bar{display:flex;height:64px;border-radius:16px;overflow:hidden;font-weight:800;font-size:18px}
+.bar div{display:flex;align-items:center;padding:0 18px;white-space:nowrap;transition:flex .4s}
+.bce{background:var(--ce);color:#fff}
+.bbq{background:var(--baq);color:var(--navy)}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.whoC{border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.whoC.ce{background:#E8EEFF;border-top:8px solid var(--ce)}
+.whoC.bq{background:#FFF1E6;border-top:8px solid var(--baq)}
+.whoC h3{margin:0;font-size:20px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.row b{font-size:16px}
+.row.tot{border-top:2px solid rgba(15,27,61,.15);padding-top:8px;margin-top:4px;font-size:17px}
+.row.tot b{font-size:22px;font-family:'Space Grotesk',Inter,sans-serif}
+.mode{display:flex;gap:8px;flex-wrap:wrap}
+.mode button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;color:var(--navy)}
+.mode button.on{border-color:var(--navy);background:var(--navy);color:#fff}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:20px;overflow:hidden;font-size:14px}
+th{background:var(--navy);color:#F5F3EE;text-align:left;padding:12px 14px;font-size:13px;letter-spacing:.5px}
+td{padding:10px 14px;border-bottom:1px solid #F0EDE6}
+td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+tr.tt td{background:#FFF6D6;font-weight:800}
+.tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;user-select:none}
+.tag.ce{background:var(--ce);color:#fff}
+.tag.bq{background:var(--baq);color:var(--navy)}
+.tag.sh{background:#E4E1D8;color:var(--navy)}
+.note{font-size:13px;color:var(--mut)}
+.warn{background:#FFF1E6;border-left:5px solid var(--baq);padding:12px 16px;border-radius:12px;font-size:14px;display:none}
+.sec2{display:grid;grid-template-columns:1.3fr 1fr;gap:20px}
+@media(max-width:1200px){.sec2{grid-template-columns:1fr}}
+.team{background:#fff;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.team h2{margin:0;font-size:22px}
+.tm{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px}
+.tm .c{font-family:'Space Grotesk',Inter,sans-serif;font-size:34px;font-weight:700;min-width:56px;text-align:center}
+.tm.ce{background:#E8EEFF}.tm.bq{background:#FFF1E6}
+.tm p{margin:0;font-size:14px;color:var(--mut)}
+.tm b{font-size:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Liquidador · Operación Call Center Libranza</h1>
+    <p>CrediExpertos × Call Center &amp; Marketing · cifras mensuales en pesos</p>
+  </div>
+  <div class="esc">
+    <span>Escenario:</span>
+    <button data-e="1">Conservador · 1/día</button>
+    <button data-e="2">Medio · 2/día</button>
+    <button data-e="3" class="on">Propuesta · 3/día</button>
+  </div>
+</header>
+
+<main>
+<aside class="panel" id="inputs"></aside>
+
+<section class="res">
+  <div class="kpis">
+    <div class="kpi"><p>Operaciones / mes</p><div class="big" id="kOps"></div><small id="kOpsS"></small></div>
+    <div class="kpi"><p>Colocación / mes</p><div class="big" id="kCol"></div><small id="kColS"></small></div>
+    <div class="kpi dark"><p>Ingreso por comisión</p><div class="big" id="kIng"></div><small id="kIngS"></small></div>
+    <div class="kpi gold"><p>Ingreso neto</p><div class="big" id="kNet"></div><small id="kNetS"></small></div>
+  </div>
+
+  <div class="split">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <h2>Propuesta económica</h2>
+      <div class="mode" id="modeSeg">
+        <button data-m="neto" class="on">Repartir el neto (costos primero)</button>
+        <button data-m="bruto">Repartir el ingreso (cada uno paga lo suyo)</button>
+      </div>
+    </div>
+    <div class="bar"><div class="bbq" id="bBQ"></div><div class="bce" id="bCE"></div></div>
+    <div class="who">
+      <div class="whoC bq"><h3>Call Center &amp; Marketing</h3><div id="wBQ"></div></div>
+      <div class="whoC ce"><h3>CrediExpertos</h3><div id="wCE"></div></div>
+    </div>
+    <p class="note" id="modeNote"></p>
+  </div>
+
+  <div class="warn" id="warn"></div>
+
+  <div class="sec2">
+    <div>
+      <table>
+        <thead><tr><th>Costo mensual</th><th>Cantidad</th><th style="text-align:right">Valor unit.</th><th style="text-align:right">Total</th><th>Paga</th></tr></thead>
+        <tbody id="costs"></tbody>
+      </table>
+      <p class="note" style="margin:8px 4px 0">Toque la etiqueta “Paga” para cambiar quién asume cada costo (aplica en “Repartir el ingreso”).</p>
+    </div>
+    <div class="team">
+      <h2>Equipo que se necesita</h2>
+      <div id="team"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+const F = [
+ {g:'Producción',c:'var(--baq)'},
+ {k:'agentes',l:'Agentes',v:10,min:1,max:60,st:1},
+ {k:'cred',l:'Créditos efectivos por agente al día',v:3,min:0.25,max:5,st:0.25},
+ {k:'ticket',l:'Ticket promedio (millones)',v:25,min:5,max:80,st:1},
+ {k:'dias',l:'Días hábiles por mes',v:20,min:15,max:24,st:1},
+ {k:'com',l:'Comisión por millón ($)',v:50000,min:10000,max:100000,st:1000},
+ {g:'Bases y marcación',c:'var(--gold)'},
+ {k:'llam',l:'Clientes en base por agente al día',v:100,min:20,max:300,st:10},
+ {k:'pAct',l:'% base que se actualiza',v:40,min:0,max:100,st:5,pct:1},
+ {k:'cAct',l:'Costo actualización por registro ($)',v:700,min:0,max:3000,st:50},
+ {k:'min',l:'Minutos por llamada',v:3,min:1,max:10,st:0.5},
+ {k:'pIA',l:'% llamadas con IA',v:40,min:0,max:100,st:5,pct:1},
+ {k:'cIA',l:'Costo IA por minuto ($)',v:350,min:0,max:1500,st:10},
+ {k:'pVici',l:'% llamadas Vicidial',v:30,min:0,max:100,st:5,pct:1},
+ {k:'cVici',l:'Costo Vicidial por minuto ($)',v:20,min:0,max:500,st:5},
+ {k:'pMan',l:'% llamadas manual',v:30,min:0,max:100,st:5,pct:1},
+ {k:'cMan',l:'Costo manual por minuto ($)',v:20,min:0,max:500,st:5},
+ {g:'Equipo y salarios',c:'var(--ce)'},
+ {k:'sAg',l:'Salario agente ($)',v:5000000,min:1500000,max:8000000,st:100000},
+ {k:'rAn',l:'1 analista CrediExpertos por cada … agentes',v:3,min:1,max:10,st:1},
+ {k:'sAn',l:'Salario analista ($)',v:4500000,min:1500000,max:8000000,st:100000},
+ {k:'rOp',l:'1 operativo CrediExpertos por cada … agentes',v:5,min:1,max:15,st:1},
+ {k:'sOp',l:'Salario operativo ($)',v:3000000,min:1500000,max:8000000,st:100000},
+ {k:'tec',l:'Soporte tecnología ($/mes)',v:5000000,min:0,max:20000000,st:500000},
+ {g:'Reparto',c:'var(--navy)'},
+ {k:'pCE',l:'% CrediExpertos (el resto es Call Center &amp; Marketing)',v:40,min:0,max:100,st:5,pct:1},
+];
+const S={}; F.forEach(f=>{if(f.k)S[f.k]=f.v});
+S.round=false;
+let mode='neto';
+const payer={agentes:'bq',analistas:'ce',operativos:'ce',bases:'sh',ia:'sh',vici:'sh',man:'sh',tec:'ce'};
+
+const fmt=n=>'$'+Math.round(n).toLocaleString('es-CO');
+const fm=n=>{const a=Math.abs(n);if(a>=1e9)return '$'+(n/1e9).toLocaleString('es-CO',{maximumFractionDigits:2})+' mil M';if(a>=1e6)return '$'+(n/1e6).toLocaleString('es-CO',{maximumFractionDigits:1})+' M';return fmt(n)};
+const num=(n,d=0)=>n.toLocaleString('es-CO',{maximumFractionDigits:d});
+
+// build inputs
+const P=document.getElementById('inputs');
+F.forEach(f=>{
+  if(f.g){P.insertAdjacentHTML('beforeend',`<div class="grp"><i style="background:${f.c}"></i>${f.g}</div>`); if(f.g==='Equipo y salarios')P.insertAdjacentHTML('beforeend','<label class="chk"><input type="checkbox" id="round"> Redondear personas hacia arriba</label>'); return;}
+  P.insertAdjacentHTML('beforeend',`<div class="in"><label for="n_${f.k}">${f.l}</label><input type="number" id="n_${f.k}" min="${f.min}" max="${f.max}" step="${f.st}" value="${f.v}"><input type="range" id="r_${f.k}" min="${f.min}" max="${f.max}" step="${f.st}" value="${f.v}" aria-label="${f.l}"></div>`);
+});
+F.forEach(f=>{ if(!f.k)return;
+  const n=document.getElementById('n_'+f.k), r=document.getElementById('r_'+f.k);
+  n.oninput=()=>{S[f.k]=parseFloat(n.value)||0; r.value=n.value; calc()};
+  r.oninput=()=>{S[f.k]=parseFloat(r.value); n.value=r.value; calc()};
+});
+document.getElementById('round').onchange=e=>{S.round=e.target.checked;calc()};
+function setV(k,v){S[k]=v;document.getElementById('n_'+k).value=v;document.getElementById('r_'+k).value=v}
+
+document.querySelectorAll('.esc button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.esc button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  setV('cred',parseFloat(b.dataset.e));calc();
+});
+document.querySelectorAll('#modeSeg button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.m;calc();
+});
+
+function calc(){
+  const ops=S.agentes*S.cred*S.dias;
+  const col=ops*S.ticket;               // millones
+  const ing=col*S.com;                  // pesos
+  const base=S.agentes*S.llam*S.dias;   // clientes/mes
+  const up=v=>S.round?Math.ceil(v-1e-9):v;
+  const nAn=up(S.agentes/S.rAn), nOp=up(S.agentes/S.rOp);
+  const mins=base*S.min;
+  const C=[
+    {id:'agentes',l:'Agentes',q:num(S.agentes),u:S.sAg,t:S.agentes*S.sAg},
+    {id:'analistas',l:'Analistas / gestores',q:num(nAn,2),u:S.sAn,t:nAn*S.sAn},
+    {id:'operativos',l:'Operativos',q:num(nOp,2),u:S.sOp,t:nOp*S.sOp},
+    {id:'bases',l:'Actualización de bases',q:num(base*S.pAct/100)+' reg.',u:S.cAct,t:base*S.pAct/100*S.cAct},
+    {id:'ia',l:'Marcación IA ('+S.pIA+'%)',q:num(mins*S.pIA/100)+' min',u:S.cIA,t:mins*S.pIA/100*S.cIA},
+    {id:'vici',l:'Vicidial ('+S.pVici+'%)',q:num(mins*S.pVici/100)+' min',u:S.cVici,t:mins*S.pVici/100*S.cVici},
+    {id:'man',l:'Manual por minuto ('+S.pMan+'%)',q:num(mins*S.pMan/100)+' min',u:S.cMan,t:mins*S.pMan/100*S.cMan},
+    {id:'tec',l:'Soporte tecnología',q:'1',u:S.tec,t:S.tec},
+  ];
+  const cost=C.reduce((a,c)=>a+c.t,0);
+  const net=ing-cost;
+  const pce=S.pCE/100, pbq=1-pce;
+
+  document.getElementById('kOps').textContent=num(ops);
+  document.getElementById('kOpsS').textContent=num(S.agentes)+' agentes × '+num(S.cred,2)+'/día × '+S.dias+' días';
+  document.getElementById('kCol').textContent=fm(col*1e6);
+  document.getElementById('kColS').textContent='Ticket $'+num(S.ticket)+' M';
+  document.getElementById('kIng').textContent=fm(ing);
+  document.getElementById('kIngS').textContent=fmt(S.com)+' por millón';
+  document.getElementById('kNet').textContent=fm(net);
+  document.getElementById('kNetS').textContent='Costos: '+fm(cost)+' · margen '+(ing?num(net/ing*100,1):0)+'%';
+
+  document.getElementById('costs').innerHTML=C.map(c=>{
+    const p=payer[c.id];const lab=p==='ce'?'CrediExpertos':p==='bq'?'Call Center & Marketing':'Compartido';
+    return `<tr><td>${c.l}</td><td>${c.q}</td><td class="n">${fmt(c.u)}</td><td class="n">${fmt(c.t)}</td><td><span class="tag ${p}" data-id="${c.id}">${lab}</span></td></tr>`}).join('')+
+    `<tr class="tt"><td>Total costos</td><td></td><td></td><td class="n">${fmt(cost)}</td><td></td></tr>`;
+  document.querySelectorAll('.tag[data-id]').forEach(t=>t.onclick=()=>{const o=['ce','bq','sh'];payer[t.dataset.id]=o[(o.indexOf(payer[t.dataset.id])+1)%3];calc()});
+
+  let ce,bq,html;
+  if(mode==='neto'){
+    ce=net*pce;bq=net*pbq;
+    const r=(w,v,b)=>`<div class="row${b?' tot':''}"><span>${w}</span><b>${v}</b></div>`;
+    document.getElementById('wCE').innerHTML=r('Ingreso neto × '+S.pCE+'%',fm(ce))+r('Utilidad mensual',fm(ce),1);
+    document.getElementById('wBQ').innerHTML=r('Ingreso neto × '+(100-S.pCE)+'%',fm(bq))+r('Utilidad mensual',fm(bq),1);
+    document.getElementById('modeNote').textContent='Primero se pagan todos los costos de la operación ('+fm(cost)+') y el neto se reparte '+(100-S.pCE)+'% Call Center & Marketing / '+S.pCE+'% CrediExpertos.';
+  }else{
+    let cc=0,cb=0;C.forEach(c=>{const p=payer[c.id];if(p==='ce')cc+=c.t;else if(p==='bq')cb+=c.t;else{cc+=c.t*pce;cb+=c.t*pbq}});
+    ce=ing*pce-cc;bq=ing*pbq-cb;
+    const r=(w,v,b)=>`<div class="row${b?' tot':''}"><span>${w}</span><b>${v}</b></div>`;
+    document.getElementById('wCE').innerHTML=r('Ingreso × '+S.pCE+'%',fm(ing*pce))+r('Sus costos','− '+fm(cc))+r('Utilidad mensual',fm(ce),1);
+    document.getElementById('wBQ').innerHTML=r('Ingreso × '+(100-S.pCE)+'%',fm(ing*pbq))+r('Sus costos','− '+fm(cb))+r('Utilidad mensual',fm(bq),1);
+    document.getElementById('modeNote').textContent='El ingreso por comisión se reparte '+(100-S.pCE)+'% Call Center & Marketing / '+S.pCE+'% CrediExpertos y cada empresa paga los costos marcados a su nombre; los compartidos se dividen en la misma proporción.';
+  }
+  const tot=Math.max(ce,0)+Math.max(bq,0)||1;
+  const bCE=document.getElementById('bCE'),bBQ=document.getElementById('bBQ');
+  bCE.style.flex=Math.max(ce,0)/tot;bBQ.style.flex=Math.max(bq,0)/tot;
+  bCE.textContent='CrediExpertos '+fm(ce);bBQ.textContent='Call Center & Marketing '+fm(bq);
+
+  const sumP=S.pIA+S.pVici+S.pMan;const w=document.getElementById('warn');
+  const msgs=[];
+  if(sumP!==100)msgs.push('Los porcentajes de marcación suman '+sumP+'% (deberían sumar 100%).');
+  if(net<0)msgs.push('Con estos valores la operación pierde dinero: los costos superan el ingreso.');
+  w.style.display=msgs.length?'block':'none';w.innerHTML=msgs.join('<br>');
+
+  const t=(cls,c,b,p)=>`<div class="tm ${cls}"><span class="c">${c}</span><div><b>${b}</b><p>${p}</p></div></div>`;
+  document.getElementById('team').innerHTML=
+    t('bq',num(S.agentes),'Agentes integrales','Call Center & Marketing · contacto, interés y cierre')+
+    t('ce',num(nAn,1),'Analistas / gestores','CrediExpertos · 1 por cada '+S.rAn+' agentes · perfilamiento y soportes')+
+    t('ce',num(nOp,1),'Operativos','CrediExpertos · 1 por cada '+S.rOp+' agentes · radicación y seguimiento')+
+    t('ce','1','Soporte tecnología','CrediExpertos · CRM, IA, Vicidial')+
+    `<p class="note">Base necesaria: <b>${num(base)}</b> clientes al mes (${num(S.llam)} por agente al día).</p>`;
+}
+calc();
+</script>
+</body>
+</html>
